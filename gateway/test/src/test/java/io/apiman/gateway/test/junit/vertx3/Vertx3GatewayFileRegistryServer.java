@@ -15,6 +15,7 @@
  */
 package io.apiman.gateway.test.junit.vertx3;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.apiman.gateway.engine.vertx.polling.URILoadingRegistry;
 import io.apiman.gateway.platforms.vertx3.verticles.ApiVerticle;
 import io.apiman.gateway.platforms.vertx3.verticles.InitVerticle;
@@ -26,14 +27,9 @@ import io.vertx.core.VertxOptions;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.json.JsonObject;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * A Vert.x 3 version of the gateway test server
@@ -43,8 +39,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 @SuppressWarnings("nls")
 public class Vertx3GatewayFileRegistryServer implements IGatewayTestServer {
 
-    protected static final int API_PORT = 9009;
-    protected static final int GW_PORT = 8082;
+    protected static int API_PORT;
+    protected static int GW_PORT;
     protected static final int ECHO_PORT = 7654;
 
     private EchoServer echoServer = new EchoServer(ECHO_PORT);
@@ -58,6 +54,7 @@ public class Vertx3GatewayFileRegistryServer implements IGatewayTestServer {
     private CountDownLatch rewriteCdl = new CountDownLatch(1);
     private CountDownLatch resetLatch = new CountDownLatch(1);
     private CountDownLatch a2fInitLatch = new CountDownLatch(1);
+    private Vertx3GatewayHelper helper;
 
     /**
      * Constructor.
@@ -67,8 +64,12 @@ public class Vertx3GatewayFileRegistryServer implements IGatewayTestServer {
 
     @Override
     public void configure(JsonNode nodeConfig) {
-        vertxConf = loadJsonObjectFromResources(nodeConfig, "config");
-        apiToFilePushEmulatorConfig = loadJsonObjectFromResources(nodeConfig, "configPushEmulator");
+        helper = new Vertx3GatewayHelper();
+        vertxConf = helper.loadJsonObjectFromResources(nodeConfig, "config");
+        apiToFilePushEmulatorConfig = helper.loadJsonObjectFromResources(nodeConfig, "configPushEmulator");
+
+        API_PORT = helper.getApiPortDynamically(apiToFilePushEmulatorConfig);
+        GW_PORT = helper.getGatewayPortDynamically(apiToFilePushEmulatorConfig);
 
         apiToFileVx = Vertx.vertx(new VertxOptions()
                 .setBlockedThreadCheckInterval(99999));
@@ -87,18 +88,6 @@ public class Vertx3GatewayFileRegistryServer implements IGatewayTestServer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private JsonObject loadJsonObjectFromResources(JsonNode nodeConfig, String name) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        String fPath = nodeConfig.get(name).asText();
-        File file = new File(classLoader.getResource(fPath).getFile());
-        try {
-            conf = new String(Files.readAllBytes(file.toPath()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return new JsonObject(conf);
     }
 
     @Override

@@ -24,6 +24,7 @@ import io.searchbox.client.config.HttpClientConfig.Builder;
 
 import java.security.SecureRandom;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -32,9 +33,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.nio.conn.SchemeIOSessionStrategy;
 import org.apache.http.nio.conn.ssl.SSLIOSessionStrategy;
+import org.apache.http.ssl.SSLContextBuilder;
 
 /**
  * Factory for creating elasticsearch clients.
@@ -74,6 +78,7 @@ public class DefaultEsClientFactory extends AbstractClientFactory implements IEs
         String username = config.get("client.username"); //$NON-NLS-1$
         String password = config.get("client.password"); //$NON-NLS-1$
         Integer timeout = NumberUtils.toInt(config.get("client.timeout"), 10000); //$NON-NLS-1$
+        Integer maxConnectionIdleTime = NumberUtils.toInt(config.get("client.maxConnectionIdleTime"), 1000); //$NON-NLS-1$
 
         if (StringUtils.isBlank(protocol)) {
             protocol = "http"; //$NON-NLS-1$
@@ -96,6 +101,7 @@ public class DefaultEsClientFactory extends AbstractClientFactory implements IEs
                 Builder httpClientConfig = new HttpClientConfig.Builder(connectionUrl)
                         .connTimeout(timeout)
                         .readTimeout(timeout)
+                        .maxConnectionIdleTime(maxConnectionIdleTime,TimeUnit.MILLISECONDS)
                         .maxTotalConnection(75)
                         .defaultMaxTotalConnectionPerRoute(75)
                         .multiThreaded(true);
@@ -138,11 +144,21 @@ public class DefaultEsClientFactory extends AbstractClientFactory implements IEs
             String trustStorePath = config.get("client.truststore");
             String trustStorePassword = config.get("client.truststore.password");
 
-            SSLContext sslContext = SSLContext.getInstance("TLS");
+            SSLContextBuilder sslContextBuilder = SSLContextBuilder.create();
+
+            String trustCertificate = config.get("client.trust.certificate");
+            if (!StringUtils.isBlank(trustCertificate) && trustCertificate.equals("true")) {
+                sslContextBuilder = sslContextBuilder.loadTrustMaterial(new TrustSelfSignedStrategy());
+            }
+
+            SSLContext sslContext = sslContextBuilder.build();
             Info kPathInfo = new Info(clientKeystorePath, clientKeystorePassword);
             Info tPathInfo = new Info(trustStorePath, trustStorePassword);
             sslContext.init(KeyStoreUtil.getKeyManagers(kPathInfo), KeyStoreUtil.getTrustManagers(tPathInfo), new SecureRandom());
-            HostnameVerifier hostnameVerifier = new DefaultHostnameVerifier();
+
+            String trustHost = config.get("client.trust.host");
+            HostnameVerifier hostnameVerifier = !StringUtils.isBlank(trustHost) && trustHost.equals("true") ? NoopHostnameVerifier.INSTANCE : new DefaultHostnameVerifier();
+
             SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
             SchemeIOSessionStrategy httpsIOSessionStrategy = new SSLIOSessionStrategy(sslContext, hostnameVerifier);
 

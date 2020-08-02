@@ -4,29 +4,29 @@
 
   <groupId>io.apiman</groupId>
   <artifactId>apiman</artifactId>
-  <version>1.5.2-SNAPSHOT</version>
+  <version>1.5.8-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>apiman</name>
 
-  <url>http://apiman.io/</url>
+  <url>https://apiman.io/</url>
   <description>Open Source API Management</description>
 
   <organization>
     <name>JBoss, a division of Red Hat</name>
-    <url>http://www.jboss.org</url>
+    <url>https://www.jboss.org</url>
   </organization>
 
   <licenses>
     <license>
       <name>Apache License Version 2.0</name>
-      <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
+      <url>https://repository.jboss.org/licenses/apache-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
 
   <issueManagement>
     <system>jira</system>
-    <url>http://issues.jboss.org/browse/APIMAN</url>
+    <url>https://issues.jboss.org/browse/APIMAN</url>
   </issueManagement>
 
   <scm>
@@ -94,7 +94,6 @@
     <version.compiler.plugin>3.2</version.compiler.plugin>
     <version.dependency.plugin>2.10</version.dependency.plugin>
     <version.deploy.plugin>2.8.2</version.deploy.plugin>
-    <version.enforcer.plugin>1.4</version.enforcer.plugin>
     <version.install.plugin>2.5.2</version.install.plugin>
     <version.jar.plugin>2.5</version.jar.plugin>
     <version.javadoc.plugin>2.10.1</version.javadoc.plugin>
@@ -108,13 +107,13 @@
     <version.war.plugin>2.5</version.war.plugin>
     <version.exec.plugin>1.3.2</version.exec.plugin>
     <version.docker.plugin>0.23.0</version.docker.plugin>
-    <version.frontend-maven.plugin>1.3</version.frontend-maven.plugin>
+    <version.frontend-maven.plugin>1.6</version.frontend-maven.plugin>
     <version.git-commit-id.plugin>2.2.1</version.git-commit-id.plugin>
 
     <!-- Dependency Versions -->
-    <version.com.fasterxml.jackson>2.9.7</version.com.fasterxml.jackson>
+    <version.com.fasterxml.jackson>2.10.0</version.com.fasterxml.jackson>
     <version.com.h2database>1.3.173</version.com.h2database>
-    <version.com.lmax>3.2.0</version.com.lmax>
+    <version.com.lmax>3.4.2</version.com.lmax>
     <version.com.squareup.okhttp>2.4.0</version.com.squareup.okhttp>
     <version.com.squareup.okio>1.4.0</version.com.squareup.okio>
     <version.com.unboundid.unboundid-ldapsdk>3.0.0</version.com.unboundid.unboundid-ldapsdk>
@@ -142,7 +141,7 @@
     <version.org.apache.httpcomponents.httpclient>4.5.3</version.org.apache.httpcomponents.httpclient>
     <version.org.apache.httpcomponents.httpcore>4.4.1</version.org.apache.httpcomponents.httpcore>
     <version.org.apache.httpcomponents.httpasyncclient>4.1</version.org.apache.httpcomponents.httpasyncclient>
-    <version.org.apache.logging.log4j>2.8.2</version.org.apache.logging.log4j>
+    <version.org.apache.logging.log4j>2.12.0</version.org.apache.logging.log4j>
     <version.org.eclipse.jetty>9.4.14.v20181114</version.org.eclipse.jetty>
     <version.org.glassfish.javax.el>3.0.0</version.org.glassfish.javax.el>
     <version.org.elasticsearch>5.6.9</version.org.elasticsearch>
@@ -165,7 +164,7 @@
     <version.org.slf4j>1.7.21</version.org.slf4j>
     <version.org.testcontainers>1.10.2</version.org.testcontainers>
     <version.io.netty>4.1.8.Final</version.io.netty>
-    <version.io.swagger>1.5.13</version.io.swagger>
+    <version.io.swagger>1.6.0</version.io.swagger>
     <version.xmlunit>1.6</version.xmlunit>
     <version.io.vertx>3.7.0</version.io.vertx>
     <version.net.openhft>0.6</version.net.openhft>
@@ -308,6 +307,11 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
+        <artifactId>apiman-manager-api-rest-exceptions</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
         <artifactId>apiman-manager-api-security</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -425,6 +429,11 @@
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>apiman-gateway-engine-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>apiman-gateway-engine-filesystem</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -810,6 +819,16 @@
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-yaml</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-xml</artifactId>
         <version>${version.com.fasterxml.jackson}</version>
       </dependency>
       <dependency>
@@ -1218,42 +1237,6 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>${version.enforcer.plugin}</version>
-          <dependencies>
-            <dependency>
-              <groupId>de.is24.maven.enforcer.rules</groupId>
-              <artifactId>illegal-transitive-dependency-check</artifactId>
-              <version>1.7.4</version>
-            </dependency>
-          </dependencies>
-          <executions>
-            <execution>
-              <id>enforcer-transitives-check</id>
-              <goals>
-                <goal>enforce</goal>
-              </goals>
-              <phase>process-classes</phase>
-              <configuration>
-                <fail>true</fail>
-                <rules>
-                  <illegalTransitiveDependencyCheck implementation="de.is24.maven.enforcer.rules.IllegalTransitiveDependencyCheck">
-                    <reportOnly>false</reportOnly>
-                    <regexIgnoredClasses>
-                      <regexIgnoredClass>javax\..+</regexIgnoredClass>
-                      <regexIgnoredClass>org.w3c.dom\..+</regexIgnoredClass>
-                      <regexIgnoredClass>io.netty.buffer.ByteBuf</regexIgnoredClass>
-                      <regexIgnoredClass>org.json\..+</regexIgnoredClass>
-                    </regexIgnoredClasses>
-                    <useClassesFromLastBuild>true</useClassesFromLastBuild>
-                  </illegalTransitiveDependencyCheck>
-                </rules>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
           <version>${version.antrun.plugin}</version>
         </plugin>
@@ -1441,11 +1424,6 @@
           </gitDescribe>
         </configuration>
       </plugin>
-      <!-- Enforcer-related stuff -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-      </plugin>
       <!-- Include the maven-compiler-plugin settings here so that Eclipse/m2e will properly import the projects. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -1539,7 +1517,7 @@
     <repository>
       <id>central</id>
       <name>Central Repository</name>
-      <url>http://repo.maven.apache.org/maven2</url>
+      <url>https://repo.maven.apache.org/maven2</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -1596,7 +1574,7 @@
         <pluginRepository>
           <id>miredot</id>
           <name>MireDot Releases</name>
-          <url>http://nexus.qmino.com/content/repositories/miredot</url>
+          <url>https://nexus.qmino.com/content/repositories/miredot</url>
         </pluginRepository>
       </pluginRepositories>
     </profile>

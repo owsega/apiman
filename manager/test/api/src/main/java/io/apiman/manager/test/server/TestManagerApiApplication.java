@@ -15,26 +15,16 @@
  */
 package io.apiman.manager.test.server;
 
-import io.apiman.manager.api.rest.impl.ActionResourceImpl;
-import io.apiman.manager.api.rest.impl.ApiManagerApplication;
-import io.apiman.manager.api.rest.impl.CurrentUserResourceImpl;
-import io.apiman.manager.api.rest.impl.DownloadResourceImpl;
-import io.apiman.manager.api.rest.impl.GatewayResourceImpl;
-import io.apiman.manager.api.rest.impl.OrganizationResourceImpl;
-import io.apiman.manager.api.rest.impl.PermissionsResourceImpl;
-import io.apiman.manager.api.rest.impl.PluginResourceImpl;
-import io.apiman.manager.api.rest.impl.PolicyDefinitionResourceImpl;
-import io.apiman.manager.api.rest.impl.RoleResourceImpl;
-import io.apiman.manager.api.rest.impl.SearchResourceImpl;
-import io.apiman.manager.api.rest.impl.SystemResourceImpl;
-import io.apiman.manager.api.rest.impl.UserResourceImpl;
-import io.apiman.manager.api.rest.impl.mappers.RestExceptionMapper;
+import io.apiman.manager.api.rest.impl.*;
+import io.apiman.manager.api.rest.exceptions.mappers.RestExceptionMapper;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ws.rs.core.Application;
+
 /**
- * Useful if jax-rs is not supported by the runtime platform.
+ * JAX-RS {@link Application} used for testing.
  *
  * @author eric.wittmann@redhat.com
  */
@@ -51,15 +41,12 @@ public class TestManagerApiApplication extends ApiManagerApplication {
         classes.add(SearchResourceImpl.class);
         classes.add(RoleResourceImpl.class);
         classes.add(UserResourceImpl.class);
-        classes.add(CurrentUserResourceImpl.class);
-        classes.add(PermissionsResourceImpl.class);
         classes.add(OrganizationResourceImpl.class);
         classes.add(PolicyDefinitionResourceImpl.class);
         classes.add(GatewayResourceImpl.class);
         classes.add(PluginResourceImpl.class);
         classes.add(ActionResourceImpl.class);
         classes.add(DownloadResourceImpl.class);
-
         classes.add(RestExceptionMapper.class);
     }
 

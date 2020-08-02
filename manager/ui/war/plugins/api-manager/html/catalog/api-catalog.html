@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
 
   <body>
@@ -82,7 +82,7 @@
               <!-- Filter: Internal APIs -->
               <span ng-show="hasInternalApis"
                     style="margin-left: 8px; height: 28px;">
-                <input id="hide-internal" type="checkbox" ng-model="hideInternal"></input>
+                <input id="hide-internal" type="checkbox" ng-model="hideInternal">
                 <label for="hide-internal"
                        apiman-i18n-key="hide-internal-apis"
                        style="padding-left: 3px">Hide internal APIs</label>
@@ -127,9 +127,10 @@
                   <div class="actions"> 
                      <span class="apiman-action-divider" apiman-i18n-skip="">&nbsp;</span>
                      <a href="#" ng-click="importApi(api)"><i class="fa fa-cart-arrow-down"></i><span style="margin-left: 5px" apiman-i18n-key="import">Import</span></a>
-                     <span ng-show="api.definitionType == 'SwaggerJSON' || api.definitionType == 'External'" 
+                     <span ng-show="api.definitionType == 'SwaggerJSON' || api.definitionType == 'SwaggerYAML' || api.definitionType == 'External'"
                            class="apiman-action-divider" apiman-i18n-skip="">|</span>
                      <a ng-show="api.definitionType == 'SwaggerJSON'" href="{{ pluginName }}/catalog/api-catalog/{{ api.name | urlEncode }}/def" target="{{api.definitionType == 'External' ? '_blank' : ''}}"><i class="fa fa-sitemap"></i><span style="margin-left: 5px" apiman-i18n-key="definition">Definition</span></a>
+                     <a ng-show="api.definitionType == 'SwaggerYAML'" href="{{ pluginName }}/catalog/api-catalog/{{ api.name | urlEncode }}/def" target="{{api.definitionType == 'External' ? '_blank' : ''}}"><i class="fa fa-sitemap"></i><span style="margin-left: 5px" apiman-i18n-key="definition">Definition</span></a>
                      <a ng-show="api.definitionType == 'External'" href="{{ api.definitionUrl }}" target="_blank"><i class="fa fa-external-link"></i><span style="margin-left: 5px" apiman-i18n-key="definition">Definition</span></a>
                   </div>
                 </div>

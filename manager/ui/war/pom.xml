@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.apiman</groupId>
     <artifactId>apiman-manager-ui</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-manager-ui-war</artifactId>
   <packaging>war</packaging>
@@ -146,8 +146,8 @@
               <goal>install-node-and-yarn</goal>
             </goals>
             <configuration>
-              <nodeVersion>v5.6.0</nodeVersion>
-              <yarnVersion>v0.20.3</yarnVersion>
+              <nodeVersion>v8.11.1</nodeVersion>
+              <yarnVersion>v1.5.1</yarnVersion>
             </configuration>
           </execution>
 

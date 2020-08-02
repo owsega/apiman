@@ -3,7 +3,7 @@
   <parent>
     <groupId>io.apiman</groupId>
     <artifactId>apiman-manager</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-manager-api</artifactId>
   <packaging>pom</packaging>
@@ -27,6 +27,7 @@
     <module>security</module>
     <module>war</module>
     <module>war/wildfly8</module>
+    <module>exceptions</module>
   </modules>
 
   <profiles>

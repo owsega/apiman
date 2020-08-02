@@ -1,4 +1,4 @@
-{ // This is a special config file that uses the ApiToFileRegistry in combination 
+{ // This is a special config file that uses the ApiToFileRegistry in combination
   // with Vertx3GatewayFileRegistryServer to emulate push behaviour for testing purposes.
     "registry": {
         "class": "io.apiman.gateway.test.junit.vertx3.ApiToFileRegistry",
@@ -13,7 +13,10 @@
 
     "plugin-registry": {
         "class": "io.apiman.gateway.platforms.vertx3.engine.VertxPluginRegistry",
-        "config": {}
+        "config": {
+            //"pluginRepositories":["https://url.to.maven.repo"],
+            //"pluginsDir": "/path/to/your/plugin_dir"
+        }
     },
 
     "connector-factory": {
@@ -103,7 +106,7 @@
     // Count - Number of given verticle type launched
     "verticles": {
         "http": {
-            "port": 8999,
+            "port": 8082,
             "count": 0
         },
         "https": {

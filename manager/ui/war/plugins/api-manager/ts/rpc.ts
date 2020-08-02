@@ -42,7 +42,11 @@ module ApimanRPC {
         function($resource, Configuration) {
             var endpoint = Configuration.api.endpoint + '/users/:user/:entityType';
             return $resource(endpoint,
-                { user: '@user', entityType: '@entityType' });
+                {user: '@user', entityType: '@entityType'}, {
+                    update: {
+                        method: 'PUT' // this method issues a PUT request
+                    }
+                });
         }]);
 
     export var OrganizationSvcs = _module.factory('OrgSvcs', ['$resource', 'Configuration',
@@ -69,12 +73,9 @@ module ApimanRPC {
 
     export var CurrentUserSvcs = _module.factory('CurrentUserSvcs', ['$resource', 'Configuration',
         function($resource, Configuration) {
-            var endpoint = Configuration.api.endpoint + '/currentuser/:what';
+            var endpoint = Configuration.api.endpoint + '/users/currentuser/:what';
             return $resource(endpoint,
-                { entityType: '@what' }, {
-                update: {
-                  method: 'PUT' // this method issues a PUT request
-                }});
+                {entityType: '@what'});
         }]);
 
     export var ActionSvcs = _module.factory('ActionSvcs', ['$resource', 'Configuration',
@@ -147,7 +148,7 @@ module ApimanRPC {
     export var ApiDefinitionSvcs = _module.factory('ApiDefinitionSvcs', ['$resource', '$http', 'Configuration',
         function($resource, $http, Configuration) {
             return {
-                getApiDefinitionUrl: function(orgId, apiId, version) {
+                getApimanDefinitionUrl: function(orgId, apiId, version) {
                     var endpoint = formatEndpoint(
                         Configuration.api.endpoint + '/organizations/:organizationId/apis/:apiId/versions/:version/definition',
                         { organizationId: orgId, apiId: apiId, version: version });
@@ -163,19 +164,34 @@ module ApimanRPC {
                         transformResponse: function(value) { return value; }
                     }).success(handler).error(errorHandler);
                 },
-                updateApiDefinition: function(orgId, apiId, version, definition, definitionType, handler, errorHandler) {
-                    var ct = 'application/json';
+                updateApiDefinition: function (orgId, apiId, version, definition, definitionType, handler, errorHandler) {
+                    let ct = 'application/json';
                     if (definitionType == 'SwaggerYAML') {
                         ct = 'application/x-yaml';
+                    } else if (definitionType == 'WSDL') {
+                        ct = 'application/wsdl+xml';
                     }
-                    var endpoint = formatEndpoint(
+                    let endpoint = formatEndpoint(
                         Configuration.api.endpoint + '/organizations/:organizationId/apis/:apiId/versions/:version/definition',
-                        { organizationId: orgId, apiId: apiId, version: version });
+                        {organizationId: orgId, apiId: apiId, version: version});
                     $http({
-                        method: 'PUT', 
+                        method: 'PUT',
                         url: endpoint,
-                        headers: { 'Content-Type' : ct },
+                        headers: {'Content-Type': ct},
                         data: definition
+                    }).success(handler).error(errorHandler);
+                },
+                updateApiDefinitionFromUrl(orgId, apiId, version, definitionUrl, definitionType, handler, errorHandler) {
+                    let ct = 'application/json';
+                    let endpoint = formatEndpoint(
+                        Configuration.api.endpoint + '/organizations/:organizationId/apis/:apiId/versions/:version/definition',
+                        {organizationId: orgId, apiId: apiId, version: version});
+                    let data = JSON.stringify({ definitionUrl: definitionUrl, definitionType: definitionType });
+                    $http({
+                        method: 'POST',
+                        url: endpoint,
+                        headers: {'Content-Type': ct},
+                        data: data
                     }).success(handler).error(errorHandler);
                 }
             }

@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.apiman</groupId>
     <artifactId>apiman-gateway-api</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-gateway-api-rest-impl</artifactId>
   <packaging>bundle</packaging>
@@ -59,7 +59,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>io.apiman.gateway.api.rest.impl*</Export-Package>
+            <Export-Package>io.apiman.gateway.api.rest.impl.*</Export-Package>
           </instructions>
         </configuration>
       </plugin>

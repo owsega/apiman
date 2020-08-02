@@ -1,20 +1,22 @@
 {
-  "Metadata" : {
-    "exportedOn" : "2016-05-16T18:59:35Z",
-    "apimanVersion" : "1.2.6.Final"
+  "Metadata": {
+    "exportedOn": "2018-05-09T12:00:00Z",
+    "apimanVersion": "${version}"
   },
-  "Users" : [],
-  "Gateways" : [ {
-    "id" : "TheGateway",
-    "name" : "The Gateway",
-    "description" : "This is the gateway.",
-    "createdBy" : "admin",
-    "createdOn" : "2016-05-16T12:34:15Z",
-    "modifiedBy" : "admin",
-    "modifiedOn" : "2016-05-16T12:34:15Z",
-    "type" : "REST",
-    "configuration" : "{\"endpoint\":\"${apiman.gateway-endpoint:https://localhost:8443/apiman-gateway-api}\",\"username\":\"${apiman.gateway-endpoint.username:apimanager}\",\"password\":\"${apiman.gateway-endpoint.password:apiman123!}\"}"
-  } ],
+  "Users": [],
+  "Gateways": [
+    {
+      "id": "TheGateway",
+      "name": "The Gateway",
+      "description": "This is the default gateway.",
+      "createdBy": "admin",
+      "createdOn": "2018-05-09T12:00:00Z",
+      "modifiedBy": "admin",
+      "modifiedOn": "2018-05-09T12:00:00Z",
+      "type": "REST",
+      "configuration": "{\"endpoint\":\"${apiman.gateway-endpoint:https://localhost:8443/apiman-gateway-api}\",\"username\":\"${apiman.gateway-endpoint.username:apimanager}\",\"password\":\"${apiman.gateway-endpoint.password:apiman123!}\"}"
+    }
+  ],
   "Plugins" : [ ],
   "Roles" : [ {
     "id" : "APIDeveloper",
@@ -62,16 +64,17 @@
     "formType" : "Default",
     "deleted" : false
   }, {
-    "id" : "CachingPolicy",
-    "policyImpl" : "class:io.apiman.gateway.engine.policies.CachingPolicy",
-    "name" : "Caching Policy",
-    "description" : "Allows caching of API responses in the Gateway to reduce overall traffic to the back-end API.",
-    "icon" : "hdd-o",
-    "templates" : [ {
-      "template" : "API responses will be cached for ${ttl} seconds."
-    } ],
-    "formType" : "Default",
-    "deleted" : false
+      "id" : "CachingResourcesPolicy",
+      "name" : "Caching Resources Policy",
+      "description" : "Allows caching of API responses in the Gateway to reduce overall traffic to the back-end API.",
+      "policyImpl" : "class:io.apiman.gateway.engine.policies.CachingResourcesPolicy",
+      "icon" : "hdd-o",
+      "templates" : [
+        {
+          "language" : null,
+          "template" : "API responses will be cached for @{ttl} seconds."
+        }
+      ]
   }, {
     "id" : "IPBlacklistPolicy",
     "policyImpl" : "class:io.apiman.gateway.engine.policies.IPBlacklistPolicy",

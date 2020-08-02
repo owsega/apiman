@@ -375,6 +375,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="parse_payload" type="BOOLEAN"/>
+            <column name="strip_keys" type="BOOLEAN"/>
             <column name="published_on" type="TIMESTAMP"/>
             <column name="retired_on" type="TIMESTAMP"/>
             <column name="status" type="VARCHAR(255)">
@@ -383,6 +384,7 @@
             <column name="version" type="VARCHAR(255)"/>
             <column name="api_id" type="VARCHAR(255)"/>
             <column name="api_org_id" type="VARCHAR(255)"/>
+            <column name="definition_url" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
     <changeSet author="apiman (generated)" id="1436469846462-19">
